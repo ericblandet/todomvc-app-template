@@ -1,19 +1,22 @@
-const todosApp = () => {
+
+window.todoStore = {
+    todos: JSON.parse(localStorage.getItem('todo-store') || '[]'),
+
+    save() {
+        localStorage.setItem('todo-store', JSON.stringify(this.todos));
+    },
+}
+
+window.todosApp = function () {
     return {
-        todos:[
-            {id:1, content:'Go to the bakery', completed:false},
-            {id:2, content:'Ride and Die', completed:false},
-            ],
-
-        editedTodo:null,
-
+        ...todoStore,
+        editedTodo: null,
         activeFilter: 'all',
-
         newTodoContent: '',
 
         get todosToDisplay() {
             return {
-                all:this.todos,
+                all: this.todos,
                 completed: this.completedTodos,
                 active: this.activeTodos
             }[this.activeFilter]
@@ -24,11 +27,15 @@ const todosApp = () => {
         },
 
         get activeTodos() {
-            return this.todos.filter(todo=>!todo.completed)
+            return this.todos.filter(todo => !todo.completed)
         },
 
         get completedTodos() {
-            return this.todos.filter(todo=>todo.completed)
+            return this.todos.filter(todo => todo.completed)
+        },
+
+        get allComplete() {
+            return this.todos.length == this.completedTodos.length
         },
 
         editTodo(todo) {
@@ -41,8 +48,8 @@ const todosApp = () => {
                 this.removeTodo(todo)
             } else {
                 todo.content = this.editedTodo.content
+                this.save()
             }
-
             this.editedTodo = null
         },
 
@@ -53,28 +60,32 @@ const todosApp = () => {
 
         createTodo() {
             if (this.cleanNewTodoContent) {
-                this.todos.push({id:this.todos.length+1, content:this.cleanNewTodoContent, completed:false})
-                this.editedTodo=null
+                this.todos.push({ id: Date.now(), content: this.cleanNewTodoContent, completed: false })
+                this.editedTodo = null
                 this.newTodoContent = ''
+                this.save()
             }
         },
 
         clearCompleted() {
             this.todos = this.activeTodos
+            this.save()
         },
 
         removeTodo(todo) {
             const position = this.todos.indexOf(todo)
-            this.todos.splice(position,1)
+            this.todos.splice(position, 1)
+            this.save()
         },
 
         toggleAllAsComplete() {
-            if (this.todos.every(todo=>todo.completed==true)) {
-                this.todos.forEach(todo=>todo.completed=false)
+            if (this.todos.every(todo => todo.completed == true)) {
+                this.todos.forEach(todo => todo.completed = false)
                 return;
             }
-            this.todos.forEach(todo=>todo.completed=true)
+            this.todos.forEach(todo => todo.completed = true)
+            this.save()
         }
 
-        }
     }
+}

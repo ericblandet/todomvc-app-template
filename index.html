@@ -19,7 +19,7 @@
 			<section class="main"
                     x-show="todos.length >0"
             >
-				<input id="toggle-all"  class="toggle-all" type="checkbox" @click="toggleAllAsComplete" >
+				<input id="toggle-all"  class="toggle-all" type="checkbox" @click="toggleAllAsComplete" x-model="allComplete">
 				<label for="toggle-all" style="cursor:pointer">Mark all as complete</label>
 				<ul class="todo-list">
 					<template x-for="todo in todosToDisplay" :key="todo.id" >
@@ -39,7 +39,7 @@
 				</ul>
 			</section>
 			<footer class="footer" x-show="todos.length>0">
-				<span class="todo-count"><strong x-text="activeTodos.length"></strong> item left</span>
+				<span class="todo-count"><strong x-text="activeTodos.length"></strong> item<span x-show="activeTodos.length!=1">s</span> left</span>
 				<ul class="filters">
                     <template x-for="filter in ['all', 'active', 'completed']">
                         <li>
