@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Template • TodoMVC</title>
+		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
+		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+		<link rel="stylesheet" href="css/app.css">
+        <script src="//unpkg.com/alpinejs" defer></script>
+	</head>
+	<body>
+		<section class="todoapp"
+            x-data="todosApp()">
+			<header class="header">
+				<h1>todos</h1>
+				<input class="new-todo" placeholder="What needs to be done?" autofocus x-model="newTodoContent" @keyup.enter="createTodo">
+			</header>
+			<section class="main"
+                    x-show="todos.length >0"
+            >
+				<input id="toggle-all"  class="toggle-all" type="checkbox" @click="toggleAllAsComplete" >
+				<label for="toggle-all" style="cursor:pointer">Mark all as complete</label>
+				<ul class="todo-list">
+					<template x-for="todo in todosToDisplay" :key="todo.id" >
+                        <li :class="{
+                            editing: todo == editedTodo,
+                            completed: todo.completed
+                            }"
+                            @dblclick="editTodo(todo)">
+                            <div class="view">
+                                <input class="toggle" type="checkbox" checked x-model="todo.completed">
+                                <label x-text="todo.content"></label>
+                                <button class="destroy" @click="removeTodo(todo)"></button>
+                            </div>
+                            <input class="edit" x-model="todo.content" @keyup.enter="patchTodo(todo)" @keyup.escape="cancelEditTodo(todo)">
+                        </li>
+                    </template>
+				</ul>
+			</section>
+			<footer class="footer" x-show="todos.length>0">
+				<span class="todo-count"><strong x-text="activeTodos.length"></strong> item left</span>
+				<ul class="filters">
+                    <template x-for="filter in ['all', 'active', 'completed']">
+                        <li>
+                            <a style="cursor:pointer" :class="activeFilter==filter ? 'selected': ''" @click.prevent="activeFilter=filter" x-text="filter"></a>
+                        </li>
+                    </template>
+
+				</ul>
+				<button class="clear-completed" x-show="completedTodos.length>0"
+                    @click="clearCompleted"
+                    >Clear completed</button>
+			</footer>
+		</section>
+		<footer class="info">
+			<p>Double-click to edit a todo</p>
+			<p>Created by <a href="#">Eric</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+		<script src="node_modules/todomvc-common/base.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>
