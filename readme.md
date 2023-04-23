@@ -1,5 +1,9 @@
 # TodoMVC App Template
 
+locally, you can run it with `php -S localhost:8888`
+
+<br/>
+
 > Template used for creating [TodoMVC](http://todomvc.com) apps
 
 ![](https://github.com/tastejs/todomvc-app-css/raw/master/screenshot.png)
